@@ -1,0 +1,60 @@
+---
+title: "olympicsWeather"
+author: "Valetin Gottardini"
+date: "2024-03-08"
+categories: [code, analysis]
+image: "image.jpg"
+---
+
+## Librairie olympicsWeather
+
+Le package olympicsWeather est un outil puissant pour obtenir des données météorologiques historiques pour les Jeux Olympiques. Il fournit un accès facile et pratique à des informations précieuses sur le temps lors des événements olympiques passés.
+
+```{r eval=FALSE}
+#Ces lignes de codes servent à illustrer l'installation du package depuis GitHub.
+remotes::install_github("Utilisateur/olympicsWeather")
+
+```
+
+### Prévisions météo
+
+#### Pour le Stade de France
+
+Vous pouvez obtenir les prévisions météo à 7 jours pour le Stade de France en utilisant la fonction `get_weather_forecast()` du package olympicsWeather. Voici comment faire :
+
+```{r}
+library(httr2)
+library(tibble)
+library(usethis)
+library(devtools)
+library(httr2)
+library(jsonlite)
+library(tibble)
+library(purrr)
+library(tidygeocoder)
+library(usethis)
+library(roxygen2)
+library(lubridate)
+library(testthat)
+library(ggplot2)
+library(olympicsWeather)
+# Obtenez les prévisions météo pour le Stade de France
+forecast_stade_france <- get_forecast("Stade de France")
+```
+
+Pour Tahiti :
+```{r}
+# Obtenez les prévisions météo pour Tahiti
+forecast_tahiti <- get_forecast("Tahiti")
+```
+
+Pour les coordonnées GPS 43.276703, 5.334791 :
+```{r}
+# Obtenez les prévisions météo pour les coordonnées GPS 43.276703, 5.334791
+forecast_gps <- get_forecast(c(43.276703,5.334791))
+
+```
+
+
+Assurez-vous d'ajuster les noms de lieux et les coordonnées GPS selon vos besoins réels.
+

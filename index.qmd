@@ -1,0 +1,25 @@
+---
+title: "my_blog"  # Titre de votre blog
+
+listing:  # Paramètres pour la liste des articles
+  contents: posts  # Le contenu provient du dossier 'posts'
+  sort: "date desc"  # Les articles sont triés par date décroissante
+  type: default  # Type de liste par défaut
+  categories: true  # Affiche les catégories des articles
+  sort-ui: false  # Désactive l'interface utilisateur pour le tri
+  filter-ui: false  # Désactive l'interface utilisateur pour le filtrage
+
+page-layout: full  # Utilise une mise en page en pleine largeur
+title-block-banner: true  # Utilise une bannière pour le bloc de titre
+
+theme: cosmo  # Utilise le thème Cosmo pour la mise en page
+css: styles.css  # Fichier CSS personnalisé pour les styles supplémentaires
+
+navbar:  # Paramètres de la barre de navigation
+  right:  # Éléments à droite de la barre de navigation
+    - about.qmd  # Lien vers la page "À propos"
+    - icon: github  # Lien vers GitHub avec une icône
+      href: https://github.com/
+    - icon: twitter  # Lien vers Twitter avec une icône
+      href: https://twitter.com
+---
