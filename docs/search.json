@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Bienvenue sur mon blog",
+    "section": "",
+    "text": "Bonjour et bienvenue sur mon blog ! Je suis très heureux de vous accueillir ici pour partager mes idées, mes expériences et mes découvertes avec vous.\nDans ce blog, vous trouverez des informations sur les sites olympique et la météo. J’ai hâte de vous présenter mes réflexions.\nN’hésitez pas à explorer les différents documents. Merci de votre visite et à bientôt !"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "my_blog",
+    "section": "",
+    "text": "olympicsWeather\n\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nMar 8, 2024\n\n\nValetin Gottardini\n\n\n\n\n\n\n  \n\n\n\n\nBienvenue sur mon blog\n\n\n\n\n\n\n\naccueil\n\n\n\n\n\n\n\n\n\n\n\nMar 8, 2024\n\n\nValentin Gottardini\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this blog"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "olympicsWeather",
+    "section": "",
+    "text": "Le package olympicsWeather est un outil puissant pour obtenir des données météorologiques historiques pour les Jeux Olympiques. Il fournit un accès facile et pratique à des informations précieuses sur le temps lors des événements olympiques passés.\n\n#Ces lignes de codes servent à illustrer l'installation du package depuis GitHub.\nremotes::install_github(\"Utilisateur/olympicsWeather\")\n\n\n\n\n\nVous pouvez obtenir les prévisions météo à 7 jours pour le Stade de France en utilisant la fonction get_weather_forecast() du package olympicsWeather. Voici comment faire :\n\nlibrary(httr2)\nlibrary(tibble)\nlibrary(usethis)\nlibrary(devtools)\nlibrary(httr2)\nlibrary(jsonlite)\n\nWarning: le package 'jsonlite' a été compilé avec la version R 4.3.3\n\nlibrary(tibble)\nlibrary(purrr)\n\n\nAttachement du package : 'purrr'\n\n\nL'objet suivant est masqué depuis 'package:jsonlite':\n\n    flatten\n\nlibrary(tidygeocoder)\nlibrary(usethis)\nlibrary(roxygen2)\nlibrary(lubridate)\n\n\nAttachement du package : 'lubridate'\n\n\nLes objets suivants sont masqués depuis 'package:base':\n\n    date, intersect, setdiff, union\n\nlibrary(testthat)\n\n\nAttachement du package : 'testthat'\n\n\nL'objet suivant est masqué depuis 'package:purrr':\n\n    is_null\n\n\nL'objet suivant est masqué depuis 'package:devtools':\n\n    test_file\n\n\nLes objets suivants sont masqués depuis 'package:httr2':\n\n    local_mock, with_mock\n\nlibrary(ggplot2)\nlibrary(olympicsWeather)\n# Obtenez les prévisions météo pour le Stade de France\nforecast_stade_france &lt;- get_forecast(\"Stade de France\")\n\nPassing 1 address to the ArcGIS single address geocoder\n\n\nQuery completed in: 0.5 seconds\n\n\n\n\n\nPour Tahiti :\n\n# Obtenez les prévisions météo pour Tahiti\nforecast_tahiti &lt;- get_forecast(\"Tahiti\")\n\nPassing 1 address to the ArcGIS single address geocoder\n\n\nQuery completed in: 0.1 seconds\n\n\n\n\n\nPour les coordonnées GPS 43.276703, 5.334791 :\n\n# Obtenez les prévisions météo pour les coordonnées GPS 43.276703, 5.334791\nforecast_gps &lt;- get_forecast(c(43.276703,5.334791))\n\n\n\n\nAssurez-vous d’ajuster les noms de lieux et les coordonnées GPS selon vos besoins réels."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#librairie-olympicsweather",
+    "href": "posts/post-with-code/index.html#librairie-olympicsweather",
+    "title": "olympicsWeather",
+    "section": "",
+    "text": "Le package olympicsWeather est un outil puissant pour obtenir des données météorologiques historiques pour les Jeux Olympiques. Il fournit un accès facile et pratique à des informations précieuses sur le temps lors des événements olympiques passés.\n\n#Ces lignes de codes servent à illustrer l'installation du package depuis GitHub.\nremotes::install_github(\"Utilisateur/olympicsWeather\")\n\n\n\n\n\nVous pouvez obtenir les prévisions météo à 7 jours pour le Stade de France en utilisant la fonction get_weather_forecast() du package olympicsWeather. Voici comment faire :\n\nlibrary(httr2)\nlibrary(tibble)\nlibrary(usethis)\nlibrary(devtools)\nlibrary(httr2)\nlibrary(jsonlite)\n\nWarning: le package 'jsonlite' a été compilé avec la version R 4.3.3\n\nlibrary(tibble)\nlibrary(purrr)\n\n\nAttachement du package : 'purrr'\n\n\nL'objet suivant est masqué depuis 'package:jsonlite':\n\n    flatten\n\nlibrary(tidygeocoder)\nlibrary(usethis)\nlibrary(roxygen2)\nlibrary(lubridate)\n\n\nAttachement du package : 'lubridate'\n\n\nLes objets suivants sont masqués depuis 'package:base':\n\n    date, intersect, setdiff, union\n\nlibrary(testthat)\n\n\nAttachement du package : 'testthat'\n\n\nL'objet suivant est masqué depuis 'package:purrr':\n\n    is_null\n\n\nL'objet suivant est masqué depuis 'package:devtools':\n\n    test_file\n\n\nLes objets suivants sont masqués depuis 'package:httr2':\n\n    local_mock, with_mock\n\nlibrary(ggplot2)\nlibrary(olympicsWeather)\n# Obtenez les prévisions météo pour le Stade de France\nforecast_stade_france &lt;- get_forecast(\"Stade de France\")\n\nPassing 1 address to the ArcGIS single address geocoder\n\n\nQuery completed in: 0.5 seconds\n\n\n\n\n\nPour Tahiti :\n\n# Obtenez les prévisions météo pour Tahiti\nforecast_tahiti &lt;- get_forecast(\"Tahiti\")\n\nPassing 1 address to the ArcGIS single address geocoder\n\n\nQuery completed in: 0.1 seconds\n\n\n\n\n\nPour les coordonnées GPS 43.276703, 5.334791 :\n\n# Obtenez les prévisions météo pour les coordonnées GPS 43.276703, 5.334791\nforecast_gps &lt;- get_forecast(c(43.276703,5.334791))\n\n\n\n\nAssurez-vous d’ajuster les noms de lieux et les coordonnées GPS selon vos besoins réels."
+  }
+]
