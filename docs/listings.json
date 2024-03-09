@@ -2,6 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/post-with-code/TD1ravance.html",
+      "/posts/post-with-code/TD2ravance.html",
+      "/posts/post-with-code/TD3ravance.html",
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html"
     ]

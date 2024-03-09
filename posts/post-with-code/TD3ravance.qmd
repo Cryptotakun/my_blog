@@ -1,0 +1,224 @@
+---
+title: "TD3ravancé"
+format: html
+editor: visual
+---
+
+```{r}
+library(stringr)
+library(lubridate)
+library(arrow)
+library(dplyr)
+library(tidyr)
+library(RSQLite)
+library(jsonlite)
+```
+Question 1
+
+```{r}
+chemin_dossier <- "data"
+
+fichiers <- list.files(chemin_dossier)
+
+cat("Les fichiers présents dans le dossier 'data' sont :\n")
+cat(fichiers, sep = "\n")
+
+extensions <- tools::file_ext(fichiers)
+cat("\nLes extensions des différents fichiers sont :\n")
+cat(extensions, sep = "\n")
+```
+
+Question 2
+
+```{r}
+table_parquet <- arrow::read_parquet("C:\\Users\\cyril\\OneDrive\\Documents\\exercice.R\\data\\tokyo_athletes.parquet")
+
+print(paste("Dimensions de la table :", nrow(table_parquet), " lignes x ", ncol(table_parquet), " colonnes"))
+
+print("Colonnes présentes : ")
+print(colnames(table_parquet))
+```
+
+Question 3
+
+```{r}
+data_json <- jsonlite::fromJSON("C:\\Users\\cyril\\OneDrive\\Documents\\exercice.R\\data\\olympics_athletes.json")
+
+table <- as.data.frame(data_json)
+
+cat("Dimensions de la table :", nrow(table), "lignes x ", ncol(table), "colonnes\n")
+
+cat("Colonnes présentes :\n")
+print(names(table))
+```
+
+Question 4
+
+```{r}
+data_sqlite <- "C:\\Users\\cyril\\OneDrive\\Documents\\exercice.R\\data\\data.sqlite"
+
+connexion <- dbConnect(SQLite(), data_sqlite)
+
+tables <- dbListTables(connexion)
+
+cat("Tables présentes dans la base de données SQLite :\n")
+cat(tables, sep = "\n")
+```
+
+Question 5
+
+```{r}
+dbWriteTable(connexion, "olympics_athletes", data_json, overwrite = TRUE)
+
+dbWriteTable(connexion, "tokyo_athletes", table_parquet, overwrite = TRUE)
+
+tables <- dbListTables(connexion)
+cat("\nTables présentes après l'ajout des nouvelles tables :\n")
+cat(tables, sep = "\n")
+```
+
+Question 6
+
+```{r}
+colonnes_olympics_athletes <- dbListFields(connexion, "olympics_athletes")
+
+cat("Colonnes de la table olympics_athletes :\n")
+cat(colonnes_olympics_athletes, sep = "\n")
+
+
+dbDisconnect(connexion)
+```
+
+Question 7
+
+```{r}
+data_sqlite <- "C:\\Users\\cyril\\OneDrive\\Documents\\exercice.R\\data\\data.sqlite"
+
+connexion <- dbConnect(SQLite(), data_sqlite)
+
+olympics_athletes <- dbReadTable(connexion, "olympics_athletes")
+
+olympics_athletes_tibble <- as_tibble(olympics_athletes)
+
+print(olympics_athletes_tibble)
+
+dbDisconnect(connexion)
+```
+
+Question 8
+
+```{r}
+data_sqlite <- "C:\\Users\\cyril\\OneDrive\\Documents\\exercice.R\\data\\data.sqlite"
+
+connexion <- dbConnect(SQLite(), data_sqlite)
+
+olympics_athletes <- dbReadTable(connexion, "olympics_athletes")
+
+olympics_athletes <- mutate(olympics_athletes, Sex = as.factor(Sex))
+
+print(head(olympics_athletes))
+
+dbDisconnect(connexion)
+```
+
+Question 9
+
+```{r}
+olympics_athletes <- olympics_athletes %>%
+  separate(
+    col = Games, 
+    into = c("Year", "Season"), 
+    sep = " ",
+    convert = TRUE
+  ) %>%
+  mutate(
+    isSummer = ifelse(tolower(Season) == "summer", TRUE, FALSE)
+  ) %>%
+  select(-Season)  
+print(head(olympics_athletes))
+```
+
+
+Question 10
+
+```{r}
+moyenne_age <- olympics_athletes %>%
+  filter(isSummer) %>%  # Filtre pour garder uniquement les Jeux d'été
+  group_by(Year) %>%     # Regrouper par année des Jeux
+  summarise(moyenne_age = mean(Age, na.rm = TRUE))  
+plus_jeune <- moyenne_age %>%
+  filter(moyenne_age == min(moyenne_age))  
+
+plus_vieux <- moyenne_age %>%
+  filter(moyenne_age == max(moyenne_age))  
+cat("Moyenne d'âge pour chaque édition des JO d'été :\n")
+print(moyenne_age)
+
+cat("\nEdition avec les athlètes les plus jeunes :\n")
+print(plus_jeune)
+
+cat("\nEdition avec les athlètes les plus âgés :\n")
+print(plus_vieux)
+```
+
+
+Question 11
+
+```{r}
+taille_max_par_discipline <- olympics_athletes %>%
+  filter(Sex == "F" & !is.na(Height)) %>%  # Filtrer pour garder seulement les athlètes féminines avec une taille définie
+  group_by(Sport) %>%                      # Regrouper par discipline
+  summarise(max_height = max(Height))      
+plus_grande_taille <- taille_max_par_discipline %>%
+  filter(max_height == max(max_height))    
+nombre_max_taille <- taille_max_par_discipline %>%
+  group_by(Sport) %>%
+  summarise(nombre_max = sum(max_height == max(max_height))) %>%
+  arrange(desc(nombre_max))           
+cat("Discipline des JO d'été avec la plus grande taille des athlètes féminines :\n")
+print(plus_grande_taille)
+
+cat("\nNombre de fois où chaque discipline a été la discipline avec la plus grande taille des athlètes :\n")
+print(nombre_max_taille)
+```
+
+Question 12
+
+```{r}
+texte <- "Les jeux olympiques d’été se déroulent normalement tous les 4 ans, durant les mois
+de Juillet et Août. Les jeux de Rio ont eu lieu du 5 Août 2016 au 20 Août 2016,
+ceux de Tokyo du 23 Juillet 2021 au 8 Août 2021, et ceux de Paris auront lieu du
+26 Juillet 2024 au 11 Août 2024. Plus de 10000 athlètes sont attendus du monde
+entier à Paris."
+
+regex_date <- "\\b\\d{1,2} (?:Janvier|Février|Mars|Avril|Mai|Juin|Juillet|Août|Septembre|Octobre|Novembre|Décembre) \\d{4}\\b"
+
+dates <- str_extract_all(texte, regex_date)[[1]]
+
+# Afficher les dates extraites
+print(dates)
+```
+
+Question 13
+
+```{r}
+texte_modifie <- str_replace_all(texte, c(
+  "Janvier" = "01", "Février" = "02", "Mars" = "03", 
+  "Avril" = "04", "Mai" = "05", "Juin" = "06", 
+  "Juillet" = "07", "Août" = "08", "Septembre" = "09", 
+  "Octobre" = "10", "Novembre" = "11", "Décembre" = "12"
+))
+
+print(texte_modifie)
+```
+
+Question 14
+
+```{r}
+dates_extracted <- c("5 Août 2016", "20 Août 2016", "23 Juillet 2021", "8 Août 2021", "26 Juillet 2024", "11 Août 2024")
+dates_converties <- dmy(dates_extracted)
+
+print(dates_converties)
+```
+
+

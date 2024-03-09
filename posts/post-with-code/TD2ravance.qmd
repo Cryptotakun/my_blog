@@ -1,0 +1,220 @@
+---
+title: "TD2ravance"
+---
+Question 1 :
+
+
+```{r}
+library(rvest)
+library(purrr)
+list_tables <-
+session("https://fr.wikipedia.org/wiki/Liste_des_m%C3%A9daill%C3%A9s_olympiques") |>
+html_elements(".wikitable") |>
+html_table()
+
+```
+ l'objet list_tables contient toutes les tables HTML extraites de la page Wikipedia "Liste des médaillés olympiques". Chaque élément de cette liste est une table représentée sous forme de dataframe en R. Chaque dataframe contient les données de chaque table extraite. Nous avons donc 6 tables dans list_tables.
+ 
+Question 2 :
+
+```{r}
+table_1 <- list_tables[[1]]
+data_medailles_sport_ete <- table_1[-1, -1]
+
+colnames(data_medailles_sport_ete) <- c("Discipline", "Annees", "Editions", "Epreuves_2020", "Or", "Argent", "Bronze", "Total", "Athletes_medailles", "Athletes_or")
+
+cols_to_convert <- c("Editions", "Epreuves_2020", "Or", "Argent", "Bronze", "Total")
+data_medailles_sport_ete[, cols_to_convert] <- lapply(data_medailles_sport_ete[, cols_to_convert], as.integer)
+
+head(data_medailles_sport_ete)
+```
+Question 3 :
+
+```{r}
+data_medailles_sport_ete <- data_medailles_sport_ete[order(-data_medailles_sport_ete$Total), ]
+top_3_disciplines <- data_medailles_sport_ete[1:3, "Discipline"]
+top_3_disciplines
+```
+Question 4 : 
+
+```{r}
+data_medailles_sport_ete <- data_medailles_sport_ete[order(data_medailles_sport_ete$Epreuves_2020), ]
+disciplines_moins_epreuves_2020 <- data_medailles_sport_ete[data_medailles_sport_ete$Epreuves_2020 == min(data_medailles_sport_ete$Epreuves_2020), "Discipline"]
+disciplines_moins_epreuves_2020
+```
+Question 5 :
+
+```{r}
+calcul_nb_editions <- function(depuis, annees_jeux_ete) {
+  nb_annees <- length(annees_jeux_ete)
+    nb_editions <- sum(annees_jeux_ete >= depuis)
+  
+  return(nb_editions)
+}
+
+annees_jeux_ete <- c(1896, 1900, 1904, 1908, 1912, 1920, 1924, 1928, 1932, 1936, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020)
+depuis <- 1900
+nb_editions_depuis_1900 <- calcul_nb_editions(depuis, annees_jeux_ete)
+print(nb_editions_depuis_1900)
+
+
+
+
+```
+Question 6 :
+
+```{r}
+calcul_nb_editions_str <- function(annees_str, annees_jeux_ete) {
+  annees <- unlist(strsplit(annees_str, ",\\s*"))
+  
+  nb_editions_total <- 0
+  
+  for (annee in annees) {
+    if (grepl("depuis", annee)) {
+      debut_intervalle <- as.integer(gsub("^depuis ", "", annee))
+      nb_editions_total <- nb_editions_total + sum(annees_jeux_ete >= debut_intervalle)
+    } else {
+      annee <- as.integer(annee)
+      if (annee %in% annees_jeux_ete) {
+        nb_editions_total <- nb_editions_total + 1
+      }
+    }
+  }
+  return(nb_editions_total)
+}
+annees_jeux_ete <- c(1896, 1900, 1904, 1908, 1912, 1920, 1924, 1928, 1932, 1936, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020)
+annees_str <- "1896, 1904, depuis 1920"
+nb_editions_str <- calcul_nb_editions_str(annees_str, annees_jeux_ete)
+print(nb_editions_str)
+
+
+```
+question 7 :
+
+```{r}
+
+calcul_nb_editions <- function(depuis, annees_jeux_ete) {
+  if (is.character(depuis)) {
+    calcul_nb_editions.character(depuis, annees_jeux_ete)
+  } else if (is.numeric(depuis)) {
+    calcul_nb_editions.integer(depuis, annees_jeux_ete)
+  } else {
+    stop("Type d'entrée non pris en charge")
+  }
+}
+
+calcul_nb_editions.integer <- function(depuis, annees_jeux_ete) {
+  return(sum(annees_jeux_ete >= depuis))
+}
+
+calcul_nb_editions.character <- function(depuis_str, annees_jeux_ete) {
+  annees <- unlist(strsplit(depuis_str, ",\\s*"))
+  
+  nb_editions_total <- 0
+  
+  for (annee in annees) {
+    if (grepl("depuis", annee)) {
+      debut_intervalle <- as.integer(gsub("^depuis ", "", annee))
+      nb_editions_total <- nb_editions_total + sum(annees_jeux_ete >= debut_intervalle)
+    } else {
+      annee <- as.integer(annee)
+      if (annee %in% annees_jeux_ete) {
+        nb_editions_total <- nb_editions_total + 1
+      }
+    }
+  }
+  return(nb_editions_total)
+}
+annees_jeux_ete <- c(1896, 1900, 1904, 1908, 1912, 1920, 1924, 1928, 1932, 1936, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020)
+resultat_integer <- calcul_nb_editions(2000, annees_jeux_ete)
+resultat_character <- calcul_nb_editions("1904–1924, depuis 1948", annees_jeux_ete)
+
+print(resultat_integer)
+print(resultat_character)
+
+
+```
+il y a eu 6 éditions des JO d'été depuis l'année 2000.
+il y a eu 19 éditions des JO d'été depuis 1904-1924 jusqu'à l'année actuelle, avec une interruption entre 1928 et 1948.
+
+
+Question 8 :
+
+```{r}
+calcul_medailles_individuelles <- function(data) {
+
+  total_medailles <- aggregate(Medals ~ Athlete, data = data, FUN = sum)
+  
+  max_medailles <- max(total_medailles$Medals)
+  
+  athlètes_max_medailles <- total_medailles[total_medailles$Medals == max_medailles, ]
+  
+  if (nrow(athlètes_max_medailles) > 1) {
+    athlètes_str <- paste(athlètes_max_medailles$Athlete, collapse = ", ")
+    return(list("Athlètes à égalité" = athlètes_str, "Nombre de médailles" = max_medailles))
+  } else {
+    return(athlètes_max_medailles)
+  }
+}
+```
+
+
+Question 9 :
+
+```{r}
+athletes_info <- strsplit(as.character(data_medailles_sport_ete$Athletes_medailles), ", ")
+
+extract_medals_data <- function(info) {
+  athlete_name <- gsub("\\(.+\\)", "", info)
+  medals_info <- gsub("[^0-9-]", "", info)
+  medals_split <- strsplit(medals_info, "-")[[1]]
+  data.frame(Athlete = athlete_name, Gold = as.integer(medals_split[1]), 
+             Silver = as.integer(medals_split[2]), Bronze = as.integer(medals_split[3]))
+}
+athletes_medals_list <- lapply(athletes_info, function(athlete_group) {
+  do.call(rbind, lapply(athlete_group, extract_medals_data))
+})
+all_athletes_medals <- do.call(rbind, athletes_medals_list)
+all_athletes_medals$Total <- with(all_athletes_medals, Gold + Silver + Bronze)
+top_athletes <- all_athletes_medals[order(-all_athletes_medals$Total), ][1:3,]
+print(top_athletes)
+```
+Question 10 :
+
+```{r}
+extraire_nationalite_athlete <- function(chaine) {
+ 
+  nationalites <- regmatches(chaine, gregexpr("\\(([^)]+)\\)", chaine))[[1]]
+  nationalites <- gsub("[()]", "", nationalites) 
+  nationalites_count <- table(nationalites)
+
+  nationalites_athletes <- nationalites_count[names(nationalites_count) %in% c("FIN", "USA", "CHN", "GBR", "GER", "RUS")] 
+  
+  return(nationalites_athletes)
+}
+nationalites_resultats <- lapply(data_medailles_sport_ete$Athletes_medailles, extraire_nationalite_athlete)
+
+nationalites_agregees <- Reduce(`+`, nationalites_resultats)
+top_3_nationalites <- sort(nationalites_agregees, decreasing = TRUE)[1:3]
+
+print(top_3_nationalites)
+
+```
+
+Question 11 :
+
+```{r}
+table_jo_hiver <- list_tables[[2]]
+extraire_nationalite_athlete <- function(chaine) {
+
+}
+
+calcul_medailles_individuelles <- function(data) {
+
+}
+library(purrr)
+
+
+nationalites <- map(table_jo_hiver$Athletes_medailles, extraire_nationalite_athlete)
+
+```
